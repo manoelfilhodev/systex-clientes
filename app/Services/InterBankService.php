@@ -2,8 +2,13 @@
 
 namespace App\Services;
 
-use Inter\Sdk\sdkLibrary\InterSdk;
 use Exception;
+use Inter\Sdk\sdkLibrary\InterSdk;
+use Inter\Sdk\sdkLibrary\pix\immediatebillings\ImmediateBillingClient;
+use Inter\Sdk\sdkLibrary\pix\models\PixBilling;
+use Inter\Sdk\sdkLibrary\pix\models\Calendar;
+use Inter\Sdk\sdkLibrary\pix\models\Debtor;
+use Inter\Sdk\sdkLibrary\pix\models\PixValue;
 
 class InterBankService
 {
@@ -11,35 +16,69 @@ class InterBankService
 
     public function __construct()
     {
-        $certPath = storage_path('inter/Sandbox_InterAPI_Certificado.crt');
-        $keyPath  = storage_path('inter/Sandbox_InterAPI_Chave.key');
+        $clientId     = env('INTER_CLIENT_ID');
+        $clientSecret = env('INTER_CLIENT_SECRET');
+        $env          = strtoupper(env('INTER_ENV', 'SANDBOX'));
 
-        if (!file_exists($certPath) || !file_exists($keyPath)) {
-            throw new Exception("Certificados do Banco Inter não encontrados em storage/inter/");
+        $pfxPath = storage_path('inter/Sandbox_InterAPI.pfx');
+
+        if (!file_exists($pfxPath)) {
+            throw new Exception("⚠️ Certificado PFX do Banco Inter não encontrado em storage/inter/");
         }
 
-        // ✅ O SDK espera o nome do ambiente em maiúsculas: "SANDBOX" ou "PRODUCTION"
+        // ✅ Instancia o SDK principal
         $this->sdk = new InterSdk(
-            'SANDBOX',
-            env('INTER_CLIENT_ID'),
-            env('INTER_CLIENT_SECRET'),
-            storage_path('inter/Sandbox_InterAPI.pfx'),
-            '' // senha vazia
+            $env,
+            $clientId,
+            $clientSecret,
+            $pfxPath,
+            '' // senha do PFX (vazia no sandbox)
         );
     }
 
-    public function getExtrato()
+    public function criarCobrancaPix($valor, $nome, $cpf, $descricao = 'Pagamento Systex')
     {
-        return [
-            "dataInicio" => "2025-10-17",
-            "dataFim" => "2025-10-17",
-            "saldoInicial" => 1000,
-            "saldoFinal" => 1885,
-            "transacoes" => [
-                ["data" => "2025-10-17", "descricao" => "PIX CLIENTE TESTE", "valor" => 500, "tipo" => "CREDITO"],
-                ["data" => "2025-10-17", "descricao" => "TARIFA MANUTENÇÃO", "valor" => -15, "tipo" => "DEBITO"],
-                ["data" => "2025-10-17", "descricao" => "PAGAMENTO CLIENTE X", "valor" => 600, "tipo" => "CREDITO"],
-            ],
-        ];
+        try {
+            $config = $this->sdk->getConfig();
+            $api = new ImmediateBillingClient();
+
+            // 🔹 Formata e valida os dados
+            $cpf = preg_replace('/\D/', '', $cpf);
+            $txid = substr('SYS' . uniqid(), 0, 35);
+
+            // 🔹 Cria os modelos conforme a SDK do Inter
+            $calendar = new \Inter\Sdk\sdkLibrary\pix\models\Calendar(3600);
+            $debtor   = new \Inter\Sdk\sdkLibrary\pix\models\Debtor($cpf, $nome);
+            $value    = new \Inter\Sdk\sdkLibrary\pix\models\PixValue(number_format((float)$valor, 2, '.', ''));
+
+            // 🔹 Monta cobrança Pix
+            $billing = new \Inter\Sdk\sdkLibrary\pix\models\PixBilling();
+            $billing->setTxid($txid);
+            $billing->setCalendar($calendar);
+            $billing->setDebtor($debtor);
+            $billing->setValue($value);
+            $billing->setKey(env('INTER_PIX_KEY')); // ⚠️ Use sua chave real
+            $billing->setPayerRequest(substr($descricao, 0, 140));
+
+            // 🔹 Depuração opcional — veja o JSON real
+            // dd(json_decode($billing->toJson(), true));
+
+            // 🔹 Envia requisição
+            // $response = $api->includeImmediateBilling($config, $billing);
+
+            dd($billing->toJson());
+
+
+            return [
+                'success' => true,
+                'txid' => $txid,
+                'data' => $response,
+            ];
+        } catch (Exception $e) {
+            return [
+                'success' => false,
+                'error' => $e->getMessage(),
+            ];
+        }
     }
 }
