@@ -1,21 +1,22 @@
 # 🧩 Systex Clientes (CRM)
 
-Sistema de **gestão de clientes e recorrência financeira** desenvolvido pela **Systex Sistemas Inteligentes**, voltado para controle de contratos, planos, faturamento recorrente, suporte técnico e acompanhamento de indicadores estratégicos.
+Sistema de **gestão de clientes e recorrência financeira** desenvolvido pela **Systex Sistemas Inteligentes**, voltado para controle de contratos, planos, faturamento recorrente, suporte técnico e acompanhamento de indicadores estratégicos de performance.
 
 ---
 
-## 🚀 Sobre o Projeto
+## 🚀 Visão Geral
 
-O **Systex Clientes** é o módulo CRM da Systex, criado para centralizar todas as informações relacionadas aos clientes da empresa, incluindo:
+O **Systex Clientes** é o módulo **CRM** da Systex, criado para **centralizar e automatizar o relacionamento com os clientes**, oferecendo uma visão completa das operações comerciais e financeiras.  
+Com ele, é possível:
 
-- Cadastro completo de clientes e responsáveis  
-- Controle de planos e assinaturas mensais  
-- Geração automática de faturas recorrentes  
-- Gestão de pagamentos e inadimplência  
-- Registro de tickets de suporte e histórico de interações  
-- Dashboards e projeções financeiras (MRR, ARR, churn, LTV)
+- Cadastrar clientes e responsáveis com informações completas  
+- Gerenciar planos e assinaturas mensais ou anuais  
+- Gerar e atualizar faturas recorrentes automaticamente  
+- Controlar pagamentos e inadimplência  
+- Registrar tickets de suporte e histórico de interações  
+- Visualizar dashboards estratégicos com indicadores de receita e churn  
 
-O sistema foi desenvolvido em **Laravel 11**, utilizando arquitetura limpa e **Filament Admin** para interface administrativa.
+O sistema foi desenvolvido em **Laravel 11**, com **arquitetura limpa (Clean Architecture)** e **Filament Admin** como painel administrativo moderno e responsivo.
 
 ---
 
@@ -23,12 +24,12 @@ O sistema foi desenvolvido em **Laravel 11**, utilizando arquitetura limpa e **F
 
 | Módulo | Descrição |
 |:--|:--|
-| **Clientes** | Cadastro completo de clientes, dados de contato, status e canal de aquisição |
-| **Planos** | Gerenciamento de planos e preços mensais/anual |
-| **Assinaturas** | Controle das assinaturas ativas, trial, pausadas ou canceladas |
+| **Clientes** | Cadastro completo com dados empresariais, responsáveis, status e canal de aquisição |
+| **Planos** | Gerenciamento de planos e periodicidades (mensal, anual, etc.) |
+| **Assinaturas** | Controle de assinaturas ativas, trials, pausadas ou canceladas |
 | **Faturas (Invoices)** | Geração automática de cobranças recorrentes |
-| **Pagamentos** | Registro de pagamentos manuais e automáticos (integração com gateways) |
-| **Tickets** | Sistema de suporte com prioridades e SLA |
+| **Pagamentos** | Registro de pagamentos manuais e automáticos (via integração com gateways) |
+| **Tickets** | Sistema de suporte com controle de prioridade e SLA |
 | **Interações** | Histórico de contatos, ligações, reuniões e follow-ups |
 | **Dashboard** | Indicadores e gráficos de performance (MRR, ARR, churn, ARPU, LTV) |
 
@@ -36,13 +37,13 @@ O sistema foi desenvolvido em **Laravel 11**, utilizando arquitetura limpa e **F
 
 ## ⚙️ Tecnologias Utilizadas
 
-- **Laravel 11** (PHP 8.2+)
-- **Filament Admin Panel**
-- **MySQL / MariaDB**
-- **Chart.js** (Gráficos e projeções)
-- **Maatwebsite/Excel** (Exportações)
-- **DomPDF** (Relatórios PDF)
-- **Mercado Pago / Asaas API** *(integração financeira opcional)*
+- **Laravel 11** (PHP 8.2+)  
+- **Filament Admin Panel**  
+- **MySQL / MariaDB**  
+- **Chart.js** (gráficos e projeções)  
+- **Maatwebsite/Excel** (exportações)  
+- **DomPDF** (relatórios em PDF)  
+- **Mercado Pago / Asaas API** *(integração financeira opcional)*  
 
 ---
 
@@ -51,8 +52,8 @@ O sistema foi desenvolvido em **Laravel 11**, utilizando arquitetura limpa e **F
 | Indicador | Descrição |
 |:--|:--|
 | **MRR (Monthly Recurring Revenue)** | Receita recorrente mensal total |
-| **ARR (Annual Recurring Revenue)** | Receita anual recorrente |
-| **Churn Rate** | Percentual de clientes cancelados no mês |
+| **ARR (Annual Recurring Revenue)** | Receita recorrente anual |
+| **Churn Rate** | Percentual de clientes que cancelaram no período |
 | **ARPU (Average Revenue per User)** | Receita média por cliente |
 | **LTV (Lifetime Value)** | Valor médio de vida útil de um cliente |
 | **Inadimplência** | Total de faturas vencidas e não pagas |
@@ -67,7 +68,7 @@ app/
  ├── Http/Controllers/       # Controllers do CRM e Dashboard
  ├── Models/                 # Models principais (Client, Plan, Subscription, etc.)
 database/
- ├── migrations/             # Estrutura de tabelas
+ ├── migrations/             # Estrutura das tabelas
 resources/
  ├── views/crm/              # Views do dashboard e relatórios
 ```
@@ -93,7 +94,7 @@ Esses comandos podem ser executados via **CRON**:
 
 ## 📊 Dashboard Financeiro
 
-O painel `/crm/dashboard` apresenta indicadores e projeções:
+O painel `/crm/dashboard` apresenta indicadores e projeções como:
 
 - Clientes ativos  
 - Receita recorrente mensal (MRR)  
@@ -142,9 +143,9 @@ O painel `/crm/dashboard` apresenta indicadores e projeções:
 
 ## 🔒 Acesso e Permissões
 
-- O sistema utiliza autenticação padrão do Laravel.  
-- Perfis previstos: **Admin**, **Financeiro**, **Suporte**.  
-- O painel administrativo (Filament) possui permissões de acordo com o nível do usuário.
+- Autenticação padrão do Laravel  
+- Perfis disponíveis: **Admin**, **Financeiro**, **Suporte**  
+- Permissões de acesso controladas pelo painel administrativo (Filament)
 
 ---
 
@@ -152,7 +153,7 @@ O painel `/crm/dashboard` apresenta indicadores e projeções:
 
 **Systex Sistemas Inteligentes**  
 Desenvolvido por [Manoel Filho](https://systex.com.br)  
-📧 contato: financeiro@systex.com.br  
+📧 E-mail: financeiro@systex.com.br  
 🌐 [https://systex.com.br](https://systex.com.br)
 
 ---
@@ -160,4 +161,4 @@ Desenvolvido por [Manoel Filho](https://systex.com.br)
 ## 🧾 Licença MIT
 
 Este projeto é de propriedade da **Systex Sistemas Inteligentes**.  
-Uso, reprodução ou redistribuição sem autorização expressa são proibidos.
+A reprodução, redistribuição ou uso sem autorização expressa é proibida.
